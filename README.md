@@ -2,6 +2,10 @@
 
 Reactive HTML UI renderer for simple layout web applications.
 
+## Demo
+
+https://fs-frost.github.io/hui/
+
 ## Usage
 
 ```html
