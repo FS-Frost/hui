@@ -17,13 +17,15 @@
     <div id="app-vanilla"></div>
 
     <script>
-        huiCounter();
-        vanillaCounter("#app-vanilla");
+        document.addEventListener("DOMContentLoaded", function () {
+            huiCounter();
+            vanillaCounter("#app-vanilla");
 
-        forkMeBaby({
-            position: "top-right",
-            link: "https://github.com/FS-Frost/hui",
-            sticky: false,
+            forkMeBaby({
+                position: "top-right",
+                link: "https://github.com/FS-Frost/hui",
+                sticky: false,
+            });
         });
     </script>
 
