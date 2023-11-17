@@ -1,39 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Counter</title>
+        <link rel="stylesheet" href="./bulma.css" />
+        <script src="./fork-me-baby.min.js"></script>
+        <script src="./hui.js"></script>
+        <script src="./counter.js"></script>
+        <script src="./vanillaCounter.js"></script>
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Counter</title>
-    <link rel="stylesheet" href="./bulma.css">
-    <script src="./fork-me-baby.min.js"></script>
-    <script src="./hui.js"></script>
-    <script src="./counter.js"></script>
-    <script src="./vanillaCounter.js"></script>
-</head>
+    <body>
+        <div id="app"></div>
+        <div id="app-vanilla"></div>
 
-<body>
-    <div id="app"></div>
-    <div id="app-vanilla"></div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                huiCounter();
+                vanillaCounter("#app-vanilla");
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            huiCounter();
-            vanillaCounter("#app-vanilla");
-
-            forkMeBaby({
-                position: "top-right",
-                link: "https://github.com/FS-Frost/hui",
-                sticky: false,
+                forkMeBaby({
+                    position: "top-right",
+                    link: "https://github.com/FS-Frost/hui",
+                    sticky: false,
+                });
             });
-        });
-    </script>
+        </script>
 
-    <style>
-        .fork-me-baby.top-right:before {
-            border-right-color: #302a7a !important;
-        }
-    </style>
-</body>
+        <style>
+            .fork-me-baby.top-right:before {
+                border-right-color: #302a7a !important;
+            }
 
+            .list {
+                display: flex;
+                /* justify-content: space-between; */
+            }
+        </style>
+    </body>
 </html>
