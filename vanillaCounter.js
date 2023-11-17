@@ -49,6 +49,23 @@ let vanillaCounter = function (selector) {
         buttonDecreaseCounter.textContent = "-";
         buttonDecreaseCounter.onclick = decreaseCounter;
         app.appendChild(buttonDecreaseCounter);
+
+        for (let i = 1; i <= count; i++) {
+            const item = document.createElement("p");
+            item.textContent = `Item ${i}`;
+            app.appendChild(item);
+        }
+
+        let list = [];
+        for (let i = -1; i >= count; i--) {
+            const item = document.createElement("p");
+            item.textContent = `Item ${i}`;
+            list = [item, ...list];
+        }
+
+        for (const item of list) {
+            app.appendChild(item);
+        }
     }
 
     render();
