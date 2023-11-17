@@ -1,85 +1,150 @@
-const classOptions = {
-    class: "",
-};
+/**
+ * @typedef {Object} DivProps
+ * @property {(classes: string) => Div} $class
+ * @property {(...children: HTMLElement[]) => Div} $append
+ *
+ * @typedef {HTMLDivElement & DivProps} Div
+ */
 
-const textOptions = {
-    text: "",
-};
-
-const divOptions = {
-    children: [],
-    ...classOptions,
-};
-
-function div(options = divOptions) {
+/**
+ *
+ * @param {...HTMLElement} [children]
+ * @returns {Div}
+ */
+function div(...children) {
     let element = document.createElement("div");
 
-    for (const child of options.children) {
-        element.appendChild(child);
-    }
+    element.$append = (...children) => {
+        if (Array.isArray(children)) {
+            for (const child of children) {
+                element.appendChild(child);
+            }
+        }
 
-    if (options.class) {
-        element.classList.add(
-            ...options.class.split(" ").filter((x) => x.length > 0)
-        );
-    }
+        return element;
+    };
+
+    element.$append(...children);
+
+    element.$class = (value) => {
+        element.classList.add(...value.split(" ").filter((x) => x.length > 0));
+        return element;
+    };
 
     return element;
 }
 
-const h1Options = {
-    ...classOptions,
-    ...textOptions,
-};
+/**
+ * @typedef {Object} HeadProps
+ * @property {(classes: string) => Head} $class
+ *
+ * @typedef {HTMLHeadElement & HeadProps} Head
+ */
 
-function h1(options = h1Options) {
+/**
+ *
+ * @param {string} text
+ * @returns {Head}
+ */
+function h1(text = "") {
     let element = document.createElement("h1");
-    element.innerText = options.text;
+    element.innerText = text;
 
-    if (options.class) {
-        element.classList.add(
-            ...options.class.split(" ").filter((x) => x.length > 0)
-        );
-    }
+    element.$class = (value) => {
+        element.classList.add(...value.split(" ").filter((x) => x.length > 0));
+        return element;
+    };
 
     return element;
 }
 
-const pOptions = {
-    ...classOptions,
-    ...textOptions,
-};
+/**
+ * @typedef {Object} ParagraphProps
+ * @property {(classes: string) => Paragraph} $class
+ *
+ * @typedef {HTMLParagraphElement & ParagraphProps} Paragraph
+ */
 
-function p(options = pOptions) {
+/**
+ *
+ * @param {string} text
+ * @returns {Paragraph}
+ */
+function p(text = "") {
     let element = document.createElement("p");
-    element.innerText = options.text;
+    element.innerText = text;
 
-    if (options.class) {
-        element.classList.add(
-            ...options.class.split(" ").filter((x) => x.length > 0)
-        );
-    }
+    element.$class = (value) => {
+        element.classList.add(...value.split(" ").filter((x) => x.length > 0));
+        return element;
+    };
 
     return element;
 }
 
-const buttonOptions = {
-    ...classOptions,
-    ...textOptions,
-    onClick: () => {},
-};
+/**
+ * @typedef {Object} AnchorProps
+ * @property {(classes: string) => Anchor} $class
+ * @property {(value: string) => Anchor} $href
+ * @property {(value: string) => Anchor} $target
+ *
+ * @typedef {HTMLAnchorElement & AnchorProps} Anchor
+ */
 
-function button(options = buttonOptions) {
+/**
+ *
+ * @param {string} text
+ * @returns {Anchor}
+ */
+function a(text = "") {
+    let element = document.createElement("a");
+    element.innerText = text;
+
+    element.$class = (value) => {
+        element.classList.add(...value.split(" ").filter((x) => x.length > 0));
+        return element;
+    };
+
+    element.$href = (value) => {
+        element.href = value;
+        return element;
+    };
+
+    element.$target = (value) => {
+        element.target = value;
+        return element;
+    };
+
+    return element;
+}
+
+/**
+ * @typedef {Object} ButtonProps
+ * @property {(classes: string) => Button} $class
+ * @property {(handler: () => void) => Button} $onClick
+ *
+ * @typedef {HTMLButtonElement & ButtonProps} Button
+ */
+
+/**
+ *
+ * @param {string} text
+ * @returns {Button}
+ */
+function button(text = "") {
     let element = document.createElement("button");
-    element.innerText = options.text;
+    element.innerText = text;
 
-    if (options.class) {
-        element.classList.add(
-            ...options.class.split(" ").filter((x) => x.length > 0)
-        );
-    }
+    element.$class = (value) => {
+        element.classList.add(...value.split(" ").filter((x) => x.length > 0));
+        return element;
+    };
 
-    element.onclick = options.onClick;
+    element.$onClick = (handler) => {
+        element.onclick = handler;
+        return element;
+    };
+
     return element;
 }
 

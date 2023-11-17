@@ -1,6 +1,6 @@
-# HUI
+# hui
 
-Reactive HTML UI renderer for simple layout web applications.
+Reactive HTML UI framework for simple web applications.
 
 ## Demo
 
@@ -24,38 +24,43 @@ https://fs-frost.github.io/hui/
         <script>
             let count = 0;
 
+            function increaseCounter() {
+                count++;
+                console.log("up it goes!", { count });
+                render();
+            }
+
+            function decreaseCounter() {
+                count--;
+                console.log("and down it went!", { count });
+                render();
+            }
+
             function counter() {
-                return div({
-                    class: "m-5",
-                    children: [
-                        div({
-                            class: "",
-                            children: [
-                                h1({
-                                    text: "HUI application",
-                                    class: "title is-1",
-                                }),
-                            ],
-                        }),
-                        div({
-                            children: [
-                                h1({
-                                    text: "Simple counter",
-                                    class: "title is-3 mt-3",
-                                }),
-                                button({
-                                    text: `Count: ${count}`,
-                                    class: "button is-primary",
-                                    onClick: () => {
-                                        count++;
-                                        console.log("click!", { count });
-                                        render();
-                                    },
-                                }),
-                            ],
-                        }),
-                    ],
-                });
+                return div()
+                    .$class("m-5")
+                    .$append(
+                        div(
+                            h1("hui demo").$class("title is-1"),
+                            p("Some clever subtitle"),
+                            a("(hui source code)")
+                                .$href("hui.js")
+                                .$target("_blank")
+                        ),
+                        div(
+                            h1("hui component").$class("title is-3 mt-3"),
+                            a("(Source code)")
+                                .$href("counter.js")
+                                .$target("_blank"),
+                            p(`Count: ${count}`),
+                            button("+")
+                                .$class("button is-success")
+                                .$onClick(increaseCounter),
+                            button("-")
+                                .$class("button is-danger")
+                                .$onClick(decreaseCounter)
+                        )
+                    );
             }
 
             newApp(counter);
