@@ -3,28 +3,83 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Counter</title>
+        <title>HUI Management</title>
         <link rel="stylesheet" href="./bulma.css" />
         <script src="./fork-me-baby.min.js"></script>
         <script src="./hui.js"></script>
         <script src="./counter.js"></script>
+        <script src="./userTable.js"></script>
         <script src="./vanillaCounter.js"></script>
     </head>
 
     <body>
-        <div id="app"></div>
-        <div id="app-vanilla"></div>
+        <div class="container mt-5">
+            <div class="tabs is-centered is-boxed">
+                <ul>
+                    <li class="tab-link is-active" data-target="app-counter"><a>hui component</a></li>
+                    <li class="tab-link" data-target="app-vanilla"><a>hui js component</a></li>
+                    <li class="tab-link" data-target="app-table"><a>hui user manager</a></li>
+                </ul>
+            </div>
+
+            <div id="app-counter" class="tab-content"></div>
+            <div id="app-vanilla" class="tab-content is-hidden"></div>
+            <div id="app-table" class="tab-content is-hidden"></div>
+        </div>
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                huiCounter();
+                huiCounter("#app-counter");
                 vanillaCounter("#app-vanilla");
+                initUserTable("#app-table");
 
                 forkMeBaby({
                     position: "top-right",
                     link: "https://github.com/FS-Frost/hui",
                     sticky: false,
                 });
+
+                // Tab switching logic
+                const tabs = document.querySelectorAll('.tab-link');
+                const tabContents = document.querySelectorAll('.tab-content');
+
+                function activateTab(targetId) {
+                    // Remove is-active from all tabs
+                    tabs.forEach(t => t.classList.remove('is-active'));
+                    // Hide all contents
+                    tabContents.forEach(content => content.classList.add('is-hidden'));
+
+                    // Activate the target
+                    const targetTab = document.querySelector(`.tab-link[data-target="${targetId}"]`);
+                    const targetContent = document.getElementById(targetId);
+
+                    if (targetTab && targetContent) {
+                        targetTab.classList.add('is-active');
+                        targetContent.classList.remove('is-hidden');
+                    } else {
+                        // Fallback to first tab if invalid
+                        tabs[0].classList.add('is-active');
+                        tabContents[0].classList.remove('is-hidden');
+                    }
+                }
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const targetId = tab.getAttribute('data-target');
+                        activateTab(targetId);
+                        // Update URL
+                        window.history.pushState({}, "", `?tab=${targetId}`);
+                    });
+                });
+
+                // Load initial tab from URL
+                const params = new URLSearchParams(window.location.search);
+                const tabParam = params.get('tab');
+                if (tabParam) {
+                    activateTab(tabParam);
+                } else {
+                    activateTab("app-counter");
+                }
             });
         </script>
 

@@ -39,9 +39,9 @@ function counter() {
                 h1("hui demo").$class("title is-1 mb-1"),
                 p("Reactive HTML UI framework for simple web applications"),
                 a("(hui source code)").$href("hui.js").$target("_blank")
-            ),
+            ).$class("mb-5"),
             div(
-                h1("hui component").$class("title is-3 mt-3 mb-1"),
+                h1("hui component").$class("title is-3 mb-1"),
                 a("(Source code)").$href("counter.js").$target("_blank"),
                 p(`Count: ${count}`),
                 button("+").$class("button is-success mr-1").$onClick(increaseCounter),
@@ -52,6 +52,6 @@ function counter() {
         );
 }
 
-function huiCounter() {
-    newApp(counter);
+function huiCounter(selector) {
+    newApp(counter, selector);
 }

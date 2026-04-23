@@ -15,8 +15,10 @@ function div(...children) {
     let element = document.createElement("div");
 
     element.$append = (...children) => {
-        if (Array.isArray(children)) {
-            for (const child of children) {
+        for (const child of children) {
+            if (Array.isArray(child)) {
+                element.append(...child);
+            } else {
                 element.appendChild(child);
             }
         }
@@ -148,20 +150,225 @@ function button(text = "") {
     return element;
 }
 
-let appComponent = null;
+/**
+ * @typedef {Object} InputProps
+ * @property {(classes: string) => Input} $class
+ * @property {(value: string) => Input} $value
+ * @property {(value: string) => Input} $placeholder
+ * @property {(value: string) => Input} $type
+ * @property {(handler: (e: Event) => void) => Input} $onInput
+ *
+ * @typedef {HTMLInputElement & InputProps} Input
+ */
 
-function newApp(component) {
-    appComponent = component;
+/**
+ *
+ * @returns {Input}
+ */
+function input() {
+    let element = document.createElement("input");
+
+    element.$class = (value) => {
+        element.classList.add(...value.split(" ").filter((x) => x.length > 0));
+        return element;
+    };
+
+    element.$value = (value) => {
+        element.value = value;
+        return element;
+    };
+
+    element.$placeholder = (value) => {
+        element.placeholder = value;
+        return element;
+    };
+
+    element.$type = (value) => {
+        element.type = value;
+        return element;
+    };
+
+    element.$onInput = (handler) => {
+        element.oninput = handler;
+        return element;
+    };
+
+    return element;
+}
+
+/**
+ * @typedef {Object} TableProps
+ * @property {(classes: string) => Table} $class
+ * @property {(...children: HTMLElement[]) => Table} $append
+ *
+ * @typedef {HTMLTableElement & TableProps} Table
+ */
+
+/**
+ *
+ * @param {...HTMLElement} [children]
+ * @returns {Table}
+ */
+function table(...children) {
+    let element = document.createElement("table");
+
+    element.$append = (...children) => {
+        for (const child of children) {
+            if (Array.isArray(child)) {
+                element.append(...child);
+            } else {
+                element.appendChild(child);
+            }
+        }
+        return element;
+    };
+
+    element.$append(...children);
+
+    element.$class = (value) => {
+        element.classList.add(...value.split(" ").filter((x) => x.length > 0));
+        return element;
+    };
+
+    return element;
+}
+
+function thead(...children) {
+    let element = document.createElement("thead");
+    element.$append = (...children) => {
+        for (const child of children) {
+            if (Array.isArray(child)) {
+                element.append(...child);
+            } else {
+                element.appendChild(child);
+            }
+        }
+        return element;
+    };
+    element.$append(...children);
+    element.$class = (value) => {
+        element.classList.add(...value.split(" ").filter((x) => x.length > 0));
+        return element;
+    };
+    return element;
+}
+
+function tbody(...children) {
+    let element = document.createElement("tbody");
+    element.$append = (...children) => {
+        for (const child of children) {
+            if (Array.isArray(child)) {
+                element.append(...child);
+            } else {
+                element.appendChild(child);
+            }
+        }
+        return element;
+    };
+    element.$append(...children);
+    element.$class = (value) => {
+        element.classList.add(...value.split(" ").filter((x) => x.length > 0));
+        return element;
+    };
+    return element;
+}
+
+function tr(...children) {
+    let element = document.createElement("tr");
+    element.$append = (...children) => {
+        for (const child of children) {
+            if (Array.isArray(child)) {
+                element.append(...child);
+            } else {
+                element.appendChild(child);
+            }
+        }
+        return element;
+    };
+    element.$append(...children);
+    element.$class = (value) => {
+        element.classList.add(...value.split(" ").filter((x) => x.length > 0));
+        return element;
+    };
+    return element;
+}
+
+function th(text = "") {
+    let element = document.createElement("th");
+    element.innerText = text;
+    element.$class = (value) => {
+        element.classList.add(...value.split(" ").filter((x) => x.length > 0));
+        return element;
+    };
+    return element;
+}
+
+function td(text = "") {
+    let element = document.createElement("td");
+    if (text instanceof HTMLElement) {
+        element.appendChild(text);
+    } else {
+        element.innerText = text;
+    }
+    element.$class = (value) => {
+        element.classList.add(...value.split(" ").filter((x) => x.length > 0));
+        return element;
+    };
+    element.$append = (...children) => {
+        for (const child of children) {
+            if (Array.isArray(child)) {
+                element.append(...child);
+            } else {
+                element.appendChild(child);
+            }
+        }
+        return element;
+    };
+    return element;
+}
+
+function label(text = "") {
+    let element = document.createElement("label");
+    element.innerText = text;
+    element.$class = (value) => {
+        element.classList.add(...value.split(" ").filter((x) => x.length > 0));
+        return element;
+    };
+    return element;
+}
+
+
+let apps = [];
+
+/**
+ * Creates a new HUI application.
+ * @param {() => HTMLElement} component - The root component function.
+ * @param {string} selector - The CSS selector for the root element. Defaults to "#app".
+ */
+function newApp(component, selector = "#app") {
+    // Check if an app is already registered for this selector to avoid duplicates
+    const existingApp = apps.find(a => a.selector === selector);
+    if (existingApp) {
+        existingApp.component = component;
+    } else {
+        apps.push({ component, selector });
+    }
     render();
 }
 
+/**
+ * Re-renders all registered HUI applications.
+ */
 function render() {
-    let app = document.querySelector("#app");
-    if (app == null) {
-        console.error("ERROR: #app element not found");
-        return;
-    }
+    for (const app of apps) {
+        const root = document.querySelector(app.selector);
+        if (root == null) {
+            console.warn(`HUI Warning: Root element "${app.selector}" not found`);
+            continue;
+        }
 
-    app.innerHTML = "";
-    app.appendChild(appComponent());
+        root.innerHTML = "";
+        root.appendChild(app.component());
+    }
 }
+
